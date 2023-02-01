@@ -32,6 +32,7 @@ RUN apt-get -y --no-install-recommends install \
     google-cloud-sdk-app-engine-python \
     google-cloud-sdk-app-engine-go \
     google-cloud-sdk-datastore-emulator \
+    python2 python3 \
     npm \
     nodejs
 RUN apt-get clean -y && rm -rf /var/lib/apt/lists/*
@@ -48,4 +49,6 @@ ENV EDITOR=vim
 ENV GOPATH=/workspace/go
 RUN mkdir -p /workspace/go && chown -R $USERNAME:$USERNAME $GOPATH
 RUN GO111MODULE=on go get golang.org/x/tools/gopls@v0.8.1
-RUN go get -v github.com/k0kubun/pp google.golang.org/appengine
+RUN go get -v google.golang.org/appengine
+RUN go get -d golang.org/x/sys/... && git -C $(go env GOPATH)/src/golang.org/x/sys reset --hard aba9fc2a8ff2
+RUN go get -d github.com/k0kubun/pp/... && git -C $(go env GOPATH)/src/github.com/k0kubun/pp reset --hard c1862c707
